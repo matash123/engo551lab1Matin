@@ -6,4 +6,3 @@ flask-login
 Flask-SQLAlchemy
 pandas
 psycopg2
-csv
