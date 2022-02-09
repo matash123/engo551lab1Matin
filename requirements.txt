@@ -4,3 +4,6 @@ psycopg2-binary
 SQLAlchemy
 flask-login
 Flask-SQLAlchemy
+pandas
+psycopg2
+pandas xlrd sqlalchemy
