@@ -1,8 +1,9 @@
 import os
+import requests
 
-from flask import Flask, session
+from flask import Flask, session, request, jsonify
 from flask_session import Session
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 app = Flask(__name__)
