@@ -4,13 +4,13 @@
 {% endblock %}
 
 {% block heading %}
-	Error
+	Success!
 {% endblock %}
 
 {% block body %}    
-{{ message }}
-<br>
-<br>
-<a href="{{ url }}">Return to {{ page }}</a>
+	{{ message }}
+	<br>
+	<br>
+	<a href= "{{ url_for('member') }}">Return to search</a>
 
 {% endblock %}

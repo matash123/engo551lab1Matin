@@ -1,0 +1,17 @@
+{% extends "temp.html" %}
+
+{% block title %}
+{% endblock %}
+
+{% block heading %}
+	Welcome.
+{% endblock %}
+
+{% block body %}    
+	<p>
+	Hi. Thanks for signing up, {{ name }}.
+	</p>
+	<br>
+	<a href= "{{ url_for('index') }}">Return to homepage to login.</a>
+
+{% endblock %}

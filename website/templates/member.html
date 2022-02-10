@@ -1,0 +1,51 @@
+{% extends "temp.html" %}
+
+{% block title %}
+{% endblock %}
+
+{% block heading %}
+	Members' book review search.
+{% endblock %}
+
+{% block body %}    
+	<p>
+	Hi, {{ name }}. What book are you looking for today? <br>
+	Search by:
+	<ul>
+		<li>ISBN number</li>
+		<li>book title</li>
+		<li>author</li>
+	</ul>	
+	</p>
+	<br>
+
+	<form action="{{ url_for('search') }}" method="post">
+
+		<div class="form-group">
+			<!-- SEARCH-BAR -->
+			 <input type="Search" name="book_id" placeholder="Search for books.">
+			 	<!-- <option value={{book_id}}> -->
+			</input>
+		</div>
+
+		<div class="form-group">
+			<button class="btn btn-primary">See all matches</button>
+		</div> 
+
+	</form>
+
+	<br>
+	<br>
+	<a href= "{{ url_for('goodbye') }}">Logout</a>
+
+{% endblock %}
+
+<!-- DROPDOWN MENU-->
+		<!-- <div class="form-group">
+			 <select class="form-control" name="book_id" placeholder="Choose a book from the dropdown.">
+				{% for book in allBooks %}
+					<option value="{{ book.id }}">{{book.title}}, {{book.year}}</option>
+				{% endfor %}
+			</select>
+		</div>  -->
+

@@ -8,10 +8,14 @@
 {% endblock %}
 
 {% block body %}
-	<br>
-	<a class="btn btn-primary" href="{{ url_for('signup') }}" role="button">Signup</a>
-	<br>
-	Have an account<br>
-	<br>
-	<a class="btn btn-primary" href="{{ url_for('login') }}" role="button">Login</a>
+Thousands of book reviews at your fingertips.  Be a part of the movement.<br>
+<br>
+<a class="btn btn-primary" href="{{ url_for('signup') }}" role="button">Sign up today!</a>
+<!-- <a href= "{{ url_for('signup') }}">Sign up today!</a><br> -->
+<br>
+<br>
+Already have an account?<br>
+<br>
+<a class="btn btn-primary" href="{{ url_for('login') }}" role="button">Login</a>
+<!-- <a href= "{{ url_for('login') }}">Login</a> -->
 {% endblock %}

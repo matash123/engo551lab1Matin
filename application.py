@@ -1,77 +1,135 @@
-from email import message
-from operator import methodcaller
+Skip to content
+Search or jump to…
+Pull requests
+Issues
+Marketplace
+Explore
+ 
+@matash123 
+ The password you provided is in a list of passwords commonly used on other websites. To increase your security, you must update your password. After February 23, 2022 we will automatically reset your password. Change your password on the settings page.
+
+Read our documentation on safer password practices.
+
+EricaLem
+/
+project1
+Public
+Code
+Issues
+Pull requests
+Actions
+Projects
+Wiki
+Security
+Insights
+project1/application.py /
+@EricaLem
+EricaLem Added /api/<isbn>
+Latest commit 3bd9b5c on Feb 27, 2020
+ History
+ 1 contributor
+197 lines (160 sloc)  7.29 KB
+   
 import os
-import requests
+import requests # for access to GoodReads API
 import statistics
 
-
-from flask import Flask, session, request, jsonify, render_template
-from flask_session import Session
+from flask import Flask, session, render_template, request, jsonify
+from flask_session import Session # store session server-side
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from flask_debugtoolbar import DebugToolbarExtension
 
 app = Flask(__name__)
 
+#DATABASE_URL = 'postgres://hszbrtnoxysrwz:f1e4c793c56b123ceb088f2f1175a64d84ce58efc4acc04bbec1d328908fce2e@ec2-34-193-42-173.compute-1.amazonaws.com:5432/d9n3d36eha0ujd'
+
 # Check for environment variable
 if not os.getenv("DATABASE_URL"):
     raise RuntimeError("DATABASE_URL is not set")
 
-app.debug = True
-app.config["SECRET_KEY"]= "matt"
+# the toolbar is only enabled in debug mode:
+app.debug = True # disable when done
+app.config["SECRET_KEY"] = "enableCookies" # set a 'SECRET_KEY' to enable the Flask session cookies
+toolbar = DebugToolbarExtension(app)
 
 # Configure session to use filesystem
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
-Session(app)
+Session(app)  # Session created so the user's info can be maintained
 
 # Set up database
 engine = create_engine(os.getenv("DATABASE_URL"))
-db = scoped_session(sessionmaker(bind=engine))
+#engine = create_engine(DATABASE_URL)
+db = scoped_session(sessionmaker(bind=engine)) # sessions for each user
 
+GoodReadsAPIKey = "EApqSumsCZMIrnDlflgQ" 
 
-@app.route("/")
-def index():
-    session["username"] = "admin"
-    session["userID"] = 0
-    return render_template("index.html")
+# Routes
 
-@app.route("/signup")
-def signup():
-    username = request.form.get("username")
-    password = request.form.get("password")
+@app.route("/")			
+def index():	
+	session["username"] = "admin"
+	session["user_ID"] = 0		
+	return render_template("index.html")
 
-    if db.execute("SELECT * FROM users WHERE username = :username", {"username": username}).rowcount > 0;
-        message="Username taken"
-        return render_template("index.html", url="signup", message=message, page="signup")
+@app.route("/signup")			
+def signup():	
+	"""Register for website"""		
+	return render_template("signup.html")
 
-    db.execute("INSERT INTO users (username, password) \
+@app.route("/login")			
+def login():
+	"""Login to website"""
+	return render_template("login.html")
+
+@app.route("/hello", methods=["POST"])			
+def hello():
+	"""Greetings page for new members"""
+	username = request.form.get("username")
+	password = request.form.get("password")
+
+	# IF username exists
+	if db.execute("SELECT * FROM users WHERE username = :username", {"username": username}).rowcount > 0:
+		message="Sorry, username already taken."
+		return render_template("error.html", url="signup", message=message, page="signup page.")
+ 
+	# OTHERWISE, insert into user table
+	db.execute("INSERT INTO users (username, password) \
 		VALUES (:username, :password)", {"username": username, "password": password}) 
-    
-    print(f"{username} can now be used")
-    db.commit()
-    return render_template("index.html", name=username)
 
-@app.route("/logout")
-def logout():
-    name = session["username"]
-    session["username"] = "admin"
-    session["userID"] = 0
-    return render_template("logout.html", name=name)
+	print(f"Now {username} is registered.")
+	db.commit()
+	return render_template("hello.html", name=username)
 
-@app.route("/find", methods=["GET", "POST"])
-def find():
-    if request.method == "POST":
-        username = request.form.get("username")
-        user = db.execute("SELECT * FROM users WHERE username = :username", {"username": username}).fetchone()
-        session["username"] = user.username
-        session["userID"] = user.id
-        
-        allBooks = db.execute("SELECT * FROM books").fetchall()
-        return render_template("find.html", name=session["username"], allBooks=allBooks)
+@app.route("/goodbye")			
+def goodbye():
+	"""Logout of website"""
+	name = session["username"]
+	session["username"] = "admin"
+	session["user_ID"] = 0
+	return render_template("goodbye.html", name=name)
 
-@app.route("/find/search", methods=["POST"])			
+@app.route("/member", methods=["GET", "POST"])			
+def member():
+
+	"""Search for a book"""
+	if request.method == "POST":
+		usrname = request.form.get("username")
+		user = db.execute("SELECT * FROM users WHERE username = :username", {"username": usrname}).fetchone()
+		session["username"] = user.username
+		session["user_ID"] = user.id
+
+		allBooks = db.execute("SELECT * FROM books").fetchall()
+		return render_template("member.html", name=session["username"], allBooks=allBooks)
+
+	if request.method == "GET":
+		allBooks = db.execute("SELECT * FROM books").fetchall()
+		return render_template("member.html", name=session["username"], allBooks=allBooks)
+
+@app.route("/member/search", methods=["POST"])			
 def search():
+	"""Retrieve responses from search"""
 	book_id = request.form.get("book_id")
 
 	book_id1 = '%' + book_id + '%'
@@ -81,7 +139,7 @@ def search():
 
 	return render_template("search.html", name=session["username"], book_id2=book_id2)
 
-@app.route("/find/search/details", methods=["GET", "POST"])			
+@app.route("/member/search/details", methods=["GET", "POST"])			
 def details():
 	if request.method == "POST":
 		result_id = request.form.get("result_id")
@@ -135,4 +193,37 @@ def details():
 	if request.method == "GET":
 		ratingGR = [session["rating_avg"], session["rating_number"]]
 		return render_template("details.html", result=session["result"], reviews=session["old_reviews"], rating=ratingGR)
-   
+
+@app.route("/api/<isbn>", methods=["GET", "POST"])
+def book_api(isbn):
+	"""Return details about a book by its ISBN #."""
+	session["isbn"] = isbn
+	# Make sure book exists in database
+	checkBook = db.execute("SELECT * FROM books WHERE isbn = :isbn", {"isbn": session["isbn"]}).rowcount
+	bookz = db.execute("SELECT * FROM books WHERE isbn = :isbn", {"isbn": session["isbn"]}).fetchone()
+	session["bookID"] = bookz.id
+	reviewz = db.execute("SELECT * FROM reviews WHERE book_id = :book_id", {"book_id": session["bookID"]}).fetchall()
+	reviewCount = db.execute("SELECT * FROM reviews WHERE book_id = :book_id", {"book_id": session["bookID"]}).rowcount
+	sum_num = 0
+	for i in range(reviewCount):
+		ratez = reviewz[i].rating
+		sum_num = sum_num + ratez
+	avg = sum_num / reviewCount
+
+	if checkBook == 0:
+		# Return 404 Error
+		return jsonify({"error": "Invalid"}), 422
+	else:
+		# Get book data
+  		return jsonify({
+  			"title": bookz.title,
+  			"author": bookz.author,
+  			"year": bookz.year,
+  			"isbn": bookz.isbn,
+  			"review_count": reviewCount,
+  			"average_score": avg
+ 			})
+
+if __name__ == '__main__':
+	with app.app_context():
+		main()
