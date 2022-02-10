@@ -1,0 +1,40 @@
+{% extends "temp.html" %}
+
+{% block title %}
+{% endblock %}
+
+{% block heading %}
+	Search
+{% endblock %}
+
+{% block body %}    
+	<p>
+	Search by:
+	<ul>
+		<li>ISBN</li>
+		<li>title</li>
+		<li>author</li>
+	</ul>	
+	</p>
+	<br>
+
+	<form action="{{ url_for('search') }}" method="post">
+
+		<div class="form-group">
+			<!-- SEARCH-BAR -->
+			 <input type="Search" name="book_id" placeholder="Search for books.">
+			 	<!-- <option value={{book_id}}> -->
+			</input>
+		</div>
+
+		<div class="form-group">
+			<button class="btn btn-primary">See all matches</button>
+		</div> 
+
+	</form>
+
+	<br>
+	<br>
+	<a href= "{{ url_for('logout') }}">Logout</a>
+
+{% endblock %}

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Books</title>
+        <style>
+            h1{
+                color: blue;
+            }
+            h2{
+                color: green
+            }
+            h3{
+                color: darkgreen
+            }
+            h4{
+                color: darkolivegreen
+            }
+            #reviewB{
+                padding: 20px;
+                border: 2px solid black;
+            }
+            #ratingB{
+                padding: 20px;
+                border: 2px solid black;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <h1>Reviews</h1>
+            <div id="linkblock" class="row">
+                <div id="link" class="col-1">
+                </div>
+                <div id="link" class="col-2">
+                    <a href = "{{ url_for('index') }}">Home</a>
+                </div>
+                <div id="link" class="col-2">
+                    <a href="{{ url_for('signup') }}">Signup</a>
+                </div>
+                <div id="link" class="col-2">
+                    <a href="{{ url_for('login') }}">Login</a>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+			<br>
+			<h2>{% block heading %}
+				{% endblock %}
+			</h2>
+		</div>
+		
+		<div class="container">
+			<br>
+			{% block body %}
+			{% endblock %}
+		</div>
+	</body>
+</html>

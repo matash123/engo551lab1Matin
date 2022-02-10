@@ -1,0 +1,14 @@
+{% extends "temp.html" %}
+
+{% block heading %}
+	Logged out
+{% endblock %}
+
+{% block body %}    
+	<p>
+	{{ name }}, is logged out.<br>
+	</p>
+	<br>
+	<a href= "{{ url_for('index') }}">Homepage.</a>
+
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends "temp.html" %}
+
+{% block heading %}
+	Book details & member reviews
+{% endblock %}
+
+{% block body %}    
+
+	<ul class="list-group">
+		<li class="list-group-item"><b>Title:</b> <i>{{result.title}}</i></li>
+		<li class="list-group-item"><b>Author:</b> {{result.author}}</li>
+		<li class="list-group-item"><b>Publication year:</b> {{result.year}}</li>
+		<li class="list-group-item"><b>ISBN number:</b> {{result.isbn}}</li>
+	</ul>
+	<br>
+
+	<h3>
+		Member reviews
+		<br>
+	</h3>
+
+	<div id="reviewHeader" class="row">
+		<div id=BLANK class="col-1">
+			
+		</div>
+        <div id="USER" class="col-2" style="padding: 10px" >
+			<b>User</b>
+		</div>
+		<div id="REV" class="col-6" style="padding: 10px" >
+			<b>Review</b>
+		</div>
+		<div id="RATE" class="col-2" style="padding: 10px" >
+			<b>Rating</b>
+		</div>
+	</div>
+	{% for review in reviews %}
+		<div id="reviewBlock" class="row">
+			<div id=BLANK class="col-1">
+			
+			</div>
+			<div id="USER" class="col-2" style="padding: 10px" >
+				<p>{{ review.username }}</p>
+			</div>
+			<div id="REV" class="col-6" style="padding: 10px">
+				<p>{{ review.submission }}</p>
+			</div>
+			<div id="RATE" class="col-2" style="padding: 10px">
+				<p>{{ review.rating }} stars</p>
+			</div>
+		</div>
+	{% endfor %}
+	<div class="container">
+		<br>
+		{% if rating[0] != 100 %}
+			<h4>
+			Ratings from GoodReads...
+			<br>
+			</h4>
+			<div id="ratingBlock" class="row">
+				<div id=BLANK class="col-1">
+					
+				</div>
+		        <div class="col-2" style="padding: 10px" >
+					<i><b>Number of ratings:</b></i>
+				</div>
+				<div class="col-2" style="padding: 10px" >
+					<i>{{ rating[1] }}</i>
+				</div>
+				<div class="col-2" style="padding: 10px" >
+					<i><b>Average rating:</b></i>
+				</div>
+				<div class="col-2" style="padding: 10px" >
+					<i>{{ rating[0] }} stars</i>
+				</div>
+			</div>
+		{% endif %}
+	</div>
+	<div class="container">
+		<h3>
+		<br>
+		Thoughts? Leave a review.
+		<br>
+		<br>
+	</h3>
+	<form action="{{ url_for('details') }}" method="post">
+		 <div class="form-group">
+		    <label for="rating">Rate on a scale of 1 to 5:</label>
+		    <select class="form-control" id="rating" name="rating" type="integer">
+		      <option value=5>5. Wow, highly recommend!</option>
+		      <option value=4>4. Thoroughly enjoyable read.</option>
+		      <option value=3>3. It was alright.</option>
+		      <option value=2>2. Meh.</option>
+		      <option value=1>1. Not my cup of tea.</option>
+		    </select>
+		</div>
+		<div class="form-group">
+			<textarea class="form-control" id="review" name="review" rows="5" style="font-style:italic" 
+					placeholder="What did you think of the book?"></textarea>
+		</div>
+		<br>
+		<div>
+			<button class="btn btn-primary">Publish review</button>
+		</div> 
+	</form>
+	</div>
+	<div class="container">
+		<br>
+		<a href= "{{ url_for('member') }}">Return to search page</a><br>
+		<br>
+		<a href= "{{ url_for('goodbye') }}">Logout</a><br>
+		<br>
+	</div>
+{% endblock %}

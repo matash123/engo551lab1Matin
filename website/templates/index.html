@@ -1,0 +1,17 @@
+{% extends "temp.html" %}
+
+{% block title %}
+{% endblock %}
+
+{% block heading %}
+	Homepage
+{% endblock %}
+
+{% block body %}
+	<br>
+	<a class="btn btn-primary" href="{{ url_for('signup') }}" role="button">Signup</a>
+	<br>
+	Have an account<br>
+	<br>
+	<a class="btn btn-primary" href="{{ url_for('login') }}" role="button">Login</a>
+{% endblock %}

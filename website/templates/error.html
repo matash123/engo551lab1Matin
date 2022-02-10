@@ -1,0 +1,16 @@
+{% extends "temp.html" %}
+	
+{% block title %}
+{% endblock %}
+
+{% block heading %}
+	Error
+{% endblock %}
+
+{% block body %}    
+	{{ message }}
+	<br>
+	<br>
+	<a href="{{ url }}">Return to {{ page }}</a>
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "temp.html" %}
+	
+{% block title %}
+{% endblock %}
+
+{% block heading %}
+	Success!
+{% endblock %}
+
+{% block body %}    
+	Here are the results that match your request, {{ name }}:
+	<br>
+	<br>
+
+	<form action="{{ url_for('details') }}" method="post">
+		<div class="form-group">
+			<select class="form-control" name="result_id">
+				{% for book in book_id2 %}
+					<option value="{{ book.id }}" >"{{ book.title }}" by {{ book.author }}, {{book.year}}
+					</option>
+				{% endfor %}
+			</select>
+		</div>
+
+		<div class="form-group">
+			<button class="btn btn-primary">See details</button>
+		</div> 
+	</form>
+	
+		<br>
+		<a href= "{{ url_for('find') }}">Return to search page</a><br>
+		<br>
+		<a href= "{{ url_for('logout') }}">Logout</a><br>

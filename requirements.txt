@@ -7,3 +7,4 @@ Flask-SQLAlchemy
 pandas
 psycopg2
 pyodbc
+flask-debugtoolbar
